@@ -6,9 +6,9 @@
 |----|------------------|----------|
 | 1. | Login            | ✅        |
 | 2. | Register         | ✅        |
-| 3. | Forgot Password  |          |
+| 3. | Forgot Password  | ✅        |
 | 4. | Landing Page     | On-Going |
-| 5. | Isi Nilai Rapor  |          |
+| 5. | Isi Nilai Rapor  | ✅        |
 | 6. | Daftar Mahasiswa |          |
 |    | &nbsp;           |          |
 
@@ -33,7 +33,9 @@ accounts/ signup/ [name='account_signup']
 ```
 
 ## Other
+
 Make sure to install pyclean, the code below purposed to clean all the `.pyc` file(cache)
+
 ```bash
 pyclean .
 ```
