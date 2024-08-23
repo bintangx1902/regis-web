@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Pendafataran Mahasiswa{% endblock %}
+
+{% block content %}
     Landing page
-<br>
-{% if not score %}
-<script type="text/javascript">
-    alert('kamu belum ada data nilai segera input!')
-    window.location.href = '/input-nilai'
-</script>
-{% endif %}
-</body>
-</html>
+    <br>
+    {{ requests.user }}
+{% endblock %}
+
+
+{% block scripts %}
+    {% if not score %}
+        <script type="text/javascript">
+            alert('kamu belum ada data nilai segera input!')
+            window.location.href = '/input-nilai'
+        </script>
+    {% endif %}
+{% endblock %}
