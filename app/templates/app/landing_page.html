@@ -4,7 +4,8 @@
 {% block content %}
     Landing page
     <br>
-    {{ requests.user }}
+    {{ request.user.score.average_score }} <br>
+    {{ request.user.score.is_pass }}
 {% endblock %}
 
 

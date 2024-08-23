@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class ScoreList(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_query_name='score', related_name='score')
     ipa_score = models.FloatField(verbose_name='Nilai IPA', default=.0,
                                   validators=[MinValueValidator(.0), MaxValueValidator(100.)])
     mtk_score = models.FloatField(verbose_name='Nilai Matematika', default=.0,

@@ -45,4 +45,4 @@ class InputScoreView(View):
         context = {
             'form': form
         }
-        return render(self.request, 'input_nilai.html', context)
+        return render(self.request, get_template('input_nilai'), context)
