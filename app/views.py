@@ -22,7 +22,7 @@ class LandingPageView(TemplateView):
 
 
 class InputScoreView(View):
-    def get(self, *args, **kwargs):
+    def get(self, request):
         data = ScoreList.objects.filter(user=self.request.user).first()
         form = InputScoreForm(instance=data) if data else InputScoreForm()
         context = {
@@ -30,15 +30,15 @@ class InputScoreView(View):
         }
         return render(self.request, get_template('input_nilai'), context=context)
 
-    def post(self, *args, **kwargs):
+    def post(self, request):
         data = ScoreList.objects.filter(user=self.request.user).first()
         form = InputScoreForm(self.request.POST, instance=data)
         if form.is_valid():
-            is_pass = is_pass_check(form.cleaned_data) if not data else None
+            is_pass = is_pass_check(form.cleaned_data)
             score_list = form.save(commit=False)
             if not data:
                 score_list.user = self.request.user
-                score_list.is_pass = is_pass
+            score_list.is_pass = is_pass
             score_list.save()
 
             return redirect('landing')
