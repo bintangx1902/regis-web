@@ -39,7 +39,7 @@ class InputScoreView(View):
             score_list.is_pass = is_pass
             score_list.save()
 
-            return redirect('some_success_url')
+            return redirect('landing')
 
         context = {
             'form': form
