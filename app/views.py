@@ -5,6 +5,7 @@ from .forms import *
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.contrib.auth import update_session_auth_hash
 
 
 class LandingPageView(TemplateView):
@@ -46,3 +47,34 @@ class InputScoreView(View):
             'form': form
         }
         return render(self.request, get_template('input_nilai'), context)
+
+    @method_decorator(login_required(login_url=settings.LOGIN_URL))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ForgotPasswordView(View):
+    template_name = get_template('reset_password')
+
+    def get(self, *args, **kwargs):
+        form = ResetPasswordForm()
+
+        return render(self.request, self.template_name, {'form': form})
+
+    def post(self, *args, **kwargs):
+        form = ResetPasswordForm(self.request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            new_password = form.cleaned_data.get('new_password')
+
+            try:
+                target = User.objects.get(email=email)
+                target.set_password(new_password)
+                target.save()
+
+                update_session_auth_hash(self.request, target)
+
+                return redirect(settings.RESET_PASSWORD_DONE_URL)
+            except User.DoesNotExist:
+                form.add_error('email', 'An unexpected error occurred.')
+        return render(self.request, self.template_name, {'form': form})

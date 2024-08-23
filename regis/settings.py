@@ -49,9 +49,10 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_SIGNUP_REDIRECT_URL = '/accounts/login/'  # add login
+ACCOUNT_SIGNUP_REDIRECT_URL = '/accounts/login/'
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/join-class'  # add complete_data
+LOGIN_REDIRECT_URL = '/'
+RESET_PASSWORD_DONE_URL = 'account_login'
 ACCOUNT_EMAIL_VERIFICATION = "none"
 CSRF_HEADER_NAME = "HTTP_X_CSRFTOKEN"
 SITE_ID = 1
