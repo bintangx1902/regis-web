@@ -14,6 +14,7 @@ class LandingPageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['score'] = ScoreList.objects.filter(user=self.request.user)
+        context['phases'] = RegistrationPhase.objects.all()
         return context
 
     @method_decorator(login_required(login_url=settings.LOGIN_URL))
@@ -78,3 +79,22 @@ class ForgotPasswordView(View):
             except User.DoesNotExist:
                 form.add_error('email', 'An unexpected error occurred.')
         return render(self.request, self.template_name, {'form': form})
+
+
+class ProfileView(DetailView):
+    context_object_name = 'data'
+    model = UserData
+    query_pk_and_slug = False
+    template_name = None
+
+    def get_queryset(self):
+        return self.model.objects.get(user=self.request.user)
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+class CreateProfileView(CreateView):
+    forms = None
+    template_name = None
+    model = UserData
