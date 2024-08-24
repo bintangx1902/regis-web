@@ -1,11 +1,41 @@
 {% extends 'base.html' %}
+{% load app_filters %}
 {% block title %}Pendafataran Mahasiswa{% endblock %}
 
 {% block content %}
     Landing page
     <br>
+    {# cek nilai lulus dan print nilai rata-rata#}
     {{ request.user.score.average_score }} <br>
-    {{ request.user.score.is_pass }}
+    {% if request.user.score.is_pass %}
+        Nilai anda Lulus
+    {% else %}
+        Nilai anda tidak lulus
+    {% endif %}
+    <br>
+    {# nanti di sini jadii button #}
+    <a href="{% url 'app:score-input' %}">Update Nilai</a>
+
+    <hr>
+    {# list keseluruhan gelombang tapi yang di tampilin pertama nanti yang open #}
+    <h1>
+        seluruh gelombang
+    </h1>
+    <br>
+    {% if phases %}
+        {% for phase in phases %}
+            {{ phase.name }} <br>
+            Tutup pada : {{ phase.closed_on_ }} <br>
+            {% if phase|is_active %}
+                {# nanti button disini kasih open kalau else di disable aja #}
+                <a href="">Daftar Gelombang Ini</a>
+            {% else %}
+                <a href="" disabled>Daftar Gelombang</a>
+            {% endif %}
+            <hr>
+        {% endfor %}
+    {% endif %}
+
 {% endblock %}
 
 
