@@ -665,17 +665,19 @@ select {
   src: url('../font/Roboto-Regular.ttf') format('woff');
 }
 
-* {
-  box-sizing: border-box;
-}
+/* * {
+        box-sizing: border-box;
+    } */
 
-html{
+html, body{
   font-family: inter;
-  width: 100vw;
-  height: 100vh;
-  overflow-x: hidden;
-  /* Prevent horizontal scrolling */
-  background-color: #F7F7F7;
+  /* width: 100vw; */
+  /* height: 100vh; */
+  /* margin: 0;
+        padding: 0; */
+  /* height: 100      %; */
+  /* overflow-x: hidden; Prevent horizontal scrolling */
+  /* background-color: #F7F7F7; */
 }
 
 @property --angle {
@@ -1759,12 +1761,6 @@ html{
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
-.from-indigo-100 {
-  --tw-gradient-from: #e0e7ff var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(224 231 255 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
 .from-30\% {
   --tw-gradient-from-position: 30%;
 }
@@ -1787,11 +1783,6 @@ html{
 .via-yellow-700 {
   --tw-gradient-to: rgb(161 98 7 / 0)  var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), #a16207 var(--tw-gradient-via-position), var(--tw-gradient-to);
-}
-
-.via-purple-50 {
-  --tw-gradient-to: rgb(250 245 255 / 0)  var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), #faf5ff var(--tw-gradient-via-position), var(--tw-gradient-to);
 }
 
 .via-50\% {
@@ -1826,10 +1817,6 @@ html{
   --tw-gradient-to: transparent var(--tw-gradient-to-position);
 }
 
-.to-cyan-100 {
-  --tw-gradient-to: #cffafe var(--tw-gradient-to-position);
-}
-
 .to-80\% {
   --tw-gradient-to-position: 80%;
 }
@@ -1848,6 +1835,10 @@ html{
 
 .bg-\[size\:6rem_4rem\] {
   background-size: 6rem 4rem;
+}
+
+.bg-cover {
+  background-size: cover;
 }
 
 .bg-clip-text {
@@ -1997,6 +1988,10 @@ html{
 
 .ps-4 {
   padding-inline-start: 1rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
 }
 
 .text-center {
@@ -2167,6 +2162,11 @@ html{
   color: rgb(74 222 128 / var(--tw-text-opacity));
 }
 
+.text-indigo-500 {
+  --tw-text-opacity: 1;
+  color: rgb(99 102 241 / var(--tw-text-opacity));
+}
+
 .text-indigo-600 {
   --tw-text-opacity: 1;
   color: rgb(79 70 229 / var(--tw-text-opacity));
@@ -2234,11 +2234,6 @@ html{
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-indigo-500 {
-  --tw-text-opacity: 1;
-  color: rgb(99 102 241 / var(--tw-text-opacity));
 }
 
 .underline {
