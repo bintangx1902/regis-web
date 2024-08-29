@@ -25,10 +25,17 @@ class LandingPageView(TemplateView):
 class InputScoreView(View):
     def get(self, request):
         data = ScoreList.objects.filter(user=self.request.user).first()
+        data.bind_score = str(data.bind_score).replace(',', '.') if data else ''
+        data.ipa_score = str(data.ipa_score).replace(',', '.') if data else ''
+        data.mtk_score = str(data.mtk_score).replace(',', '.') if data else ''
+        data.bing_score = str(data.bing_score).replace(',', '.') if data else ''
+        
         form = InputScoreForm(instance=data) if data else InputScoreForm()
         context = {
-            'form': form
+            'form': form,
+            'data': data
         }
+        print(data, form)
         return render(self.request, get_template('input_nilai'), context=context)
 
     def post(self, request):
