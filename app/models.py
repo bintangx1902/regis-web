@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from babel.dates import format_datetime
 from django.utils.translation import gettext_lazy as _
-
+from django.utils.text import slugify
 
 gender_list = [
     ('p', 'Pria'),
@@ -62,6 +62,7 @@ class RegistrationPhase(models.Model):
                                    auto_now_add=False)
     closed_on = models.DateTimeField(_('Tanggal Penutupan Gelombang : '), auto_now=False, auto_created=False,
                                      auto_now_add=False)
+    slug = models.SlugField(max_length=20, null=True, blank=True, default='')
 
     def __str__(self):
         return f"{self.name}, buka pada {self.time_stamp(self.open_on)}, tutup pada {self.time_stamp(self.closed_on)}"
@@ -77,3 +78,11 @@ class RegistrationPhase(models.Model):
     def open_on_(self):
         return f"{self.time_stamp(self.open_on)}"
 
+    def generate_slug(self, name):
+        slug = slugify(name)
+        return slug[:self._meta.get_field('slug').max_length]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self.generate_slug(self.name)
+        super().save(*args, **kwargs)
