@@ -49,3 +49,14 @@ class ResetPasswordForm(Form):
 
         return cleaned_data
 
+
+class UserProfileForm(ModelForm):
+    class Meta:
+        model = UserData
+        fields = ['date_of_birth', 'place_of_birth', 'gender', 'religion']
+
+
+class RegistrationPhaseForm(ModelForm):
+    class Meta:
+        model = RegistrationPhase
+        fields = '__all__'
