@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse, reverse_lazy
 from .utils import *
 from django.views.generic import *
 from .forms import *
@@ -6,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.auth import update_session_auth_hash
+from django.http import HttpResponseRedirect
 
 
 class LandingPageView(TemplateView):
@@ -80,21 +82,74 @@ class ForgotPasswordView(View):
                 form.add_error('email', 'An unexpected error occurred.')
         return render(self.request, self.template_name, {'form': form})
 
-
-class ProfileView(DetailView):
-    context_object_name = 'data'
-    model = UserData
-    query_pk_and_slug = False
-    template_name = None
-
-    def get_queryset(self):
-        return self.model.objects.get(user=self.request.user)
-
+    @method_decorator(login_required(login_url=settings.LOGIN_URL))
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
 
-class CreateProfileView(CreateView):
-    forms = None
-    template_name = None
+class ProfileView(DetailView):
+    context_object_name = 'data'
     model = UserData
+    template_name = get_template('profile')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(self.model, user=self.request.user)
+
+    @method_decorator(login_required(login_url=settings.LOGIN_URL))
+    def dispatch(self, request, *args, **kwargs):
+        data = self.model.objects.filter(user=request.user)
+        if not data:
+            return HttpResponseRedirect(reverse('app:profile-create'))
+        return super().dispatch(request, *args, **kwargs)
+
+
+class CreateProfileView(CreateView):
+    form_class = UserProfileForm
+    model = UserData
+    template_name = get_template('profile_create')
+    context_object_name = 'form'
+    success_url = reverse_lazy('app:profile')
+
+    def form_valid(self, form):
+        slug = slug_generator(10)
+        slug_list = [x.unique_code for x in self.model.objects.all()]
+        slug = check_slug(slug, slug_list)
+
+        form.instance.user = self.request.user
+        form.instance.unique_code = slug
+        return super().form_valid(form)
+
+    @method_decorator(login_required(login_url=settings.LOGIN_URL))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+class UpdateProfileView(UpdateView):
+    form_class = UserProfileForm
+    model = UserData
+    template_name = get_template('profile_create')
+    context_object_name = 'form'
+    success_url = reverse_lazy('app:profile')
+    query_pk_and_slug = True
+    slug_url_kwarg = 'slug'
+    slug_field = 'unique_code'
+
+    @method_decorator(login_required(login_url=settings.LOGIN_URL))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+class RegistrationPhaseView(View):
+    template_name = get_template('registration')
+
+    def get(self, *args, **kwargs):
+        # check the user has the required data or not
+        user = self.request.user
+        if not hasattr(user, 'data'):
+            return HttpResponseRedirect(reverse('app:profile-create'))
+        form = RegistrationPhaseForm()
+
+        return render(self.request, self.template_name)
+
+    def post(self, *args, **kwargs):
+        return
