@@ -28,7 +28,7 @@
             Tutup pada : {{ phase.closed_on_ }} <br>
             {% if phase|is_active %}
                 {# nanti button disini kasih open kalau else di disable aja #}
-                <a href="">Daftar Gelombang Ini</a>
+                <a href="{% url 'app:registration-phase' phase.slug %}">Daftar Gelombang Ini</a>
             {% else %}
                 <a href="" disabled>Daftar Gelombang</a>
             {% endif %}
