@@ -1,3 +1,5 @@
+import django.db.models
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from .utils import *
@@ -27,10 +29,17 @@ class LandingPageView(TemplateView):
 class InputScoreView(View):
     def get(self, request):
         data = ScoreList.objects.filter(user=self.request.user).first()
+        data.bind_score = str(data.bind_score).replace(',', '.') if data else ''
+        data.ipa_score = str(data.ipa_score).replace(',', '.') if data else ''
+        data.mtk_score = str(data.mtk_score).replace(',', '.') if data else ''
+        data.bing_score = str(data.bing_score).replace(',', '.') if data else ''
+
         form = InputScoreForm(instance=data) if data else InputScoreForm()
         context = {
-            'form': form
+            'form': form,
+            'data': data
         }
+        print(data, form)
         return render(self.request, get_template('input_nilai'), context=context)
 
     def post(self, request):
@@ -129,10 +138,14 @@ class UpdateProfileView(UpdateView):
     model = UserData
     template_name = get_template('profile_create')
     context_object_name = 'form'
-    success_url = reverse_lazy('app:profile')
     query_pk_and_slug = True
     slug_url_kwarg = 'slug'
     slug_field = 'unique_code'
+
+    def get_success_url(self):
+        if self.request.GET.get('next'):
+            return self.request.GET.get('next', reverse_lazy('app:registration-phase'))
+        return reverse_lazy('app:profile')
 
     @method_decorator(login_required(login_url=settings.LOGIN_URL))
     def dispatch(self, request, *args, **kwargs):
@@ -143,13 +156,55 @@ class RegistrationPhaseView(View):
     template_name = get_template('registration')
 
     def get(self, *args, **kwargs):
-        # check the user has the required data or not
+        phase = self.get_phase(kwargs.get('slug'))
+        if not phase:
+            return HttpResponseRedirect('/')
+        phase_form = Registration.objects.filter(user=self.request.user, phase=phase)
+        if phase_form:
+            messages.info(self.request, 'Kamu tidak bisa mendaftar 2 kali pada gelombang yang sama')
+            return HttpResponseRedirect('/')
+
+        context = dict()
         user = self.request.user
         if not hasattr(user, 'data'):
+            messages.info(self.request, 'Lengkapi lah data pribadi terlebih dahulu')
             return HttpResponseRedirect(reverse('app:profile-create'))
-        form = RegistrationPhaseForm()
+        form = RegistrationToPhaseForm()
+        context['form'] = form
 
-        return render(self.request, self.template_name)
+        return render(self.request, self.template_name, context)
 
     def post(self, *args, **kwargs):
-        return
+        phase = self.get_phase(kwargs.get('slug'))
+        if not phase:
+            return HttpResponseRedirect('/')
+        phase_form = Registration.objects.filter(user=self.request.user, phase=phase)
+        if phase_form:
+            messages.info(self.request, 'Kamu tidak bisa mendaftar 2 kali pada gelombang yang sama')
+            return HttpResponseRedirect('/')
+
+        form = RegistrationToPhaseForm(self.request.POST)
+        if form.is_valid():
+            form.instance.user = self.request.user
+            form.instance.phase = RegistrationPhase.objects.get(slug=kwargs.get('slug'))
+            form.save()
+            return redirect('app:registration-history')
+        context = {'form': form}
+        return render(self.request, get_template('registration'), context)
+
+    def get_phase(self, slug) -> django.db.models.QuerySet:
+        return RegistrationPhase.objects.filter(slug=slug).first()
+
+    @method_decorator(login_required(login_url=settings.LOGIN_URL))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+class RegistrationHistoryView(ListView):
+    model = Registration
+    context_object_name = 'datas'
+    template_name = get_template('regis_hist')
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+

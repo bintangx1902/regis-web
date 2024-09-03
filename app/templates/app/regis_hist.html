@@ -5,12 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button>save</button>
-</form>
+<h1>Registration history</h1>
 <br>
-
+{% for data in datas %}
+    {{ data }} <br>
+{% endfor %}
 </body>
 </html>

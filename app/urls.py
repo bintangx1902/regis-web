@@ -6,6 +6,7 @@ app_name = 'app'
 urlpatterns = [
     path('', LandingPageView.as_view(), name='landing'),
     path('input-nilai', InputScoreView.as_view(), name='score-input'),
+    path('registration/history', RegistrationHistoryView.as_view(), name='registration-history'),
     path('registration/<slug>', RegistrationPhaseView.as_view(), name='registration-phase'),
     path('reset-password', ForgotPasswordView.as_view(), name='reset-password'),
     path('profile', ProfileView.as_view(), name='profile'),
