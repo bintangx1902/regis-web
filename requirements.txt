@@ -1,5 +1,5 @@
 django==4.2.*
-django-allauth==64.1.0
+django-allauth==64.2.0
 djangorestframework==3.15.2
 pyclean==3.0.0
-ipython==8.24.0
+ipython==8.27.0
