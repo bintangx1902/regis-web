@@ -86,3 +86,29 @@ class RegistrationPhase(models.Model):
         if not self.slug:
             self.slug = self.generate_slug(self.name)
         super().save(*args, **kwargs)
+
+
+class Faculty(models.Model):
+    name = models.CharField(_('Nama Fakultas '), max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Prodi(models.Model):
+    name = models.CharField(_('Nama Prodi '), max_length=100)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, verbose_name=_('Fakultas '))
+
+    def __str__(self):
+        return f"{self.name} - {self.faculty}"
+
+
+class Registration(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    prodi = models.ForeignKey(Prodi, on_delete=models.CASCADE)
+    phase = models.ForeignKey(RegistrationPhase, on_delete=models.CASCADE)
+    address = models.TextField(_('Alamat Domisil '))
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} mendaftar pada" \
+               f" gelombang {self.phase.name}, dengan prodi {self.prodi}"

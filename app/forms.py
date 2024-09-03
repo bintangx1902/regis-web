@@ -56,7 +56,7 @@ class UserProfileForm(ModelForm):
         fields = ['date_of_birth', 'place_of_birth', 'gender', 'religion']
 
 
-class RegistrationPhaseForm(ModelForm):
+class RegistrationToPhaseForm(ModelForm):
     class Meta:
-        model = RegistrationPhase
-        fields = '__all__'
+        model = Registration
+        fields = ['prodi', 'address']
