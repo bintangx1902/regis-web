@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Nama Depan : {{ data.user.first_name }} <br>
+Nama Belakang : {{ data.user.last_name }} <br>
+Tempat lahir : {{ data.place_of_birth }} <br>
+tanggal Lahir : {{ data.date_of_birth }} <br>
+
+<a href="{% url 'app:profile-update' data.unique_code %}">Update</a>
+</body>
+</html>

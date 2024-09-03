@@ -1,17 +1,174 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Input Nilai</title>
-</head>
-<body>
-<br>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button>Save</button>
-</form>
+{% extends 'base-3.html'%}
+
+{% load static %}
 
 
-</body>
-</html>
+{% block head_title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<main class="w-full h-full" style="">
+      <div
+        class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
+        aria-hidden="true">
+        <div
+          class="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]"
+          style="
+            clip-path: polygon(
+              74.1% 44.1%,
+              100% 61.6%,
+              97.5% 26.9%,
+              85.5% 0.1%,
+              80.7% 2%,
+              72.5% 32.5%,
+              60.2% 62.4%,
+              52.4% 68.1%,
+              47.5% 58.3%,
+              45.2% 34.5%,
+              27.5% 76.7%,
+              0.1% 64.9%,
+              17.9% 100%,
+              27.6% 76.8%,
+              76.1% 97.7%,
+              74.1% 44.1%
+            );
+          "></div>
+      </div>
+
+      <!-- MAIN 2 -->
+      <!-- <div class="mx-auto flex justify-center items-center"> -->
+      <div class="z-10 mx-4 mt-4 lg:mt-4 lg:flex lg:flex-row justify-evenly">
+                 <a href="/">
+                   <div class="flex justify-start items-center">
+            <div class="flex items-center p-1 rounded-xl text-slate-600 flex-col bg-white border border-gray-200 shadow-sm md:p-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24" height="24" class="size-8" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
+                          </svg>
+                    </div>
+                    </div>
+                 </a>
+        <div
+          class="animate-fade-in -translate-y-4 mt-6 rounded-xl bg-white border border-gray-200 shadow-sm p-6 md:p-7">
+          <!-- Card Section -->
+          <!-- <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 mx-auto">
+            <div class="bg-white rounded-xl shadow p-4 sm:p-7"> -->
+          <div class="mb-3">
+            <h2 class="text-xl font-bold text-gray-800">Update Nilai</h2>
+            <p class="text-sm text-gray-600">
+              Update Semua Nilai mata pelajaran
+            </p>
+          </div>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+            <!-- Grid -->
+            <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+              <!-- End Col -->
+
+              <div class="sm:col-span-3">
+                <label
+                  for="af-account-email"
+                  class="inline-block text-sm text-gray-800 mt-2.5">
+                  IPA
+                </label>
+              </div>
+              <!-- End Col -->
+
+              <div class="sm:col-span-9">
+                <input
+                  id="af-account-email"
+                  type="number"
+                  name="ipa_score"
+                  class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                   {% if data.ipa_score %}
+                     value="{{ data.ipa_score }}" 
+                {% endif %}
+                  placeholder="" />
+              </div>
+              <div class="sm:col-span-3">
+                <label
+                  for="af-account-email"
+                  class="inline-block text-sm text-gray-800 mt-2.5">
+                  MTK
+                </label>
+              </div>
+              <!-- End Col -->
+
+              <div class="sm:col-span-9">
+                <input
+                  id="af-account-email"
+                  type="number"
+                  name="mtk_score"
+                  class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                  {% if data.mtk_score %}
+                     value="{{ data.mtk_score }}" 
+                {% endif %}
+                  placeholder="" />
+              </div>
+              <div class="sm:col-span-3">
+                <label
+                  for="af-account-email"
+                  class="inline-block text-sm text-gray-800 mt-2.5">
+                  BIND
+                </label>
+              </div>
+              <!-- End Col -->
+
+              <div class="sm:col-span-9">
+                  
+                  <input
+                  id="af-account-email"
+                  type="number"
+                  name="bind_score"
+                  class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                  {% if data.bind_score %}
+                     value="{{ data.bind_score }}" 
+                {% endif %}
+                     />
+              </div>
+              <div class="sm:col-span-3">
+                <label
+                  for="af-account-email"
+                  class="inline-block text-sm text-gray-800 mt-2.5">
+                  BING
+                </label>
+              </div>
+              <!-- End Col -->
+
+              <div class="sm:col-span-9">
+                <input
+                  id="af-account-email"
+                  type="number"
+                  name="bing_score"
+                  class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                    {% if data.bing_score %}
+                     value="{{ data.bing_score }}" 
+                {% endif %}
+                  placeholder="" />
+              </div>
+            </div>
+            <!-- End Grid -->
+
+            <div class="mt-5 flex justify-end gap-x-2">
+              {% comment %} <button
+                type="button"
+                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50">
+                Cancel
+              </button> {% endcomment %}
+              <button
+                type=""
+                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+                Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+        <!-- End Card -->
+      </div>
+      <!-- End Card Section -->
+      <!-- </div>
+      </div> -->
+      <!-- </div> -->
+    </main>
+
+{% endblock %}
