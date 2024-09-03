@@ -16,23 +16,32 @@ class LandingPageView(TemplateView):
     template_name = get_template('landing_page')
 
     def get_context_data(self, **kwargs):
+        # print("data========")
+        # user = self.request.user
+        # print(user)
         context = super().get_context_data(**kwargs)
+        user_data = UserData.objects.filter(user=self.request.user).first()
+        print(user_data)
+        context['unique_code'] = user_data.unique_code if user_data else 'No Code'
         context['score'] = ScoreList.objects.filter(user=self.request.user)
         context['phases'] = RegistrationPhase.objects.all()
         return context
 
     @method_decorator(login_required(login_url=settings.LOGIN_URL))
     def dispatch(self, request, *args, **kwargs):
+        if not hasattr(request.user, 'data'):
+            return redirect('app:profile')
         return super().dispatch(request, *args, **kwargs)
 
 
 class InputScoreView(View):
     def get(self, request):
         data = ScoreList.objects.filter(user=self.request.user).first()
-        data.bind_score = str(data.bind_score).replace(',', '.') if data else ''
-        data.ipa_score = str(data.ipa_score).replace(',', '.') if data else ''
-        data.mtk_score = str(data.mtk_score).replace(',', '.') if data else ''
-        data.bing_score = str(data.bing_score).replace(',', '.') if data else ''
+        if data:
+            data.bind_score = str(data.bind_score).replace(',', '.') if data else {}
+            data.ipa_score = str(data.ipa_score).replace(',', '.') if data else {}
+            data.mtk_score = str(data.mtk_score).replace(',', '.') if data else {}
+            data.bing_score = str(data.bing_score).replace(',', '.') if data else {}
 
         form = InputScoreForm(instance=data) if data else InputScoreForm()
         context = {
@@ -122,7 +131,7 @@ class CreateProfileView(CreateView):
     def form_valid(self, form):
         slug = slug_generator(10)
         slug_list = [x.unique_code for x in self.model.objects.all()]
-        slug = check_slug(slug, slug_list)
+        slug = check_slug(slug, slug_list,10)
 
         form.instance.user = self.request.user
         form.instance.unique_code = slug
@@ -130,6 +139,7 @@ class CreateProfileView(CreateView):
 
     @method_decorator(login_required(login_url=settings.LOGIN_URL))
     def dispatch(self, request, *args, **kwargs):
+        print("CreateProfileView")
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -150,6 +160,15 @@ class UpdateProfileView(UpdateView):
     @method_decorator(login_required(login_url=settings.LOGIN_URL))
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+        
+    def get_object(self, queryset=None):
+        # Get the user's profile data
+        return self.request.user.data 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['data'] = self.object  # Pass the profile data to the template 
+        return context
 
 
 class RegistrationPhaseView(View):
