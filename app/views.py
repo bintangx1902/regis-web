@@ -21,7 +21,7 @@ class LandingPageView(TemplateView):
         # print(user)
         context = super().get_context_data(**kwargs)
         user_data = UserData.objects.filter(user=self.request.user).first()
-        print(user_data)
+        # print(user_data)
         context['unique_code'] = user_data.unique_code if user_data else 'No Code'
         context['score'] = ScoreList.objects.filter(user=self.request.user)
         context['phases'] = RegistrationPhase.objects.all()
@@ -48,7 +48,7 @@ class InputScoreView(View):
             'form': form,
             'data': data
         }
-        print(data, form)
+        # print(data, form)
         return render(self.request, get_template('input_nilai'), context=context)
 
     def post(self, request):
@@ -139,7 +139,7 @@ class CreateProfileView(CreateView):
 
     @method_decorator(login_required(login_url=settings.LOGIN_URL))
     def dispatch(self, request, *args, **kwargs):
-        print("CreateProfileView")
+        # print("CreateProfileView")
         return super().dispatch(request, *args, **kwargs)
 
 
